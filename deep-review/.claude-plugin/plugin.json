@@ -1,0 +1,12 @@
+{
+  "name": "deep-review",
+  "version": "1.0.0",
+  "description": "13-agent hierarchical codebase analysis with cross-division discussion and unified scorecard",
+  "author": {
+    "name": "Tolga Oral"
+  },
+  "homepage": "https://github.com/HiveHelmOrg/hivehelm/tree/main/deep-review",
+  "repository": "https://github.com/HiveHelmOrg/hivehelm",
+  "license": "MIT",
+  "keywords": ["code-review", "analysis", "multi-agent", "codebase-audit"]
+}
