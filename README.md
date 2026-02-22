@@ -4,7 +4,7 @@
 
 You don't need to build agents. You need to run them.
 
-HiveHelm is a methodology for organizing and operating multi-agent AI systems — with departments, personas, policies, and observability. It's extracted from a real system running 30 agents, 83 skills, and 16 team blueprints in production daily.
+HiveHelm is a methodology for organizing and operating multi-agent AI systems: departments, personas, policies, and observability. It's extracted from a real system running 30 agents, 83 skills, and 16 team blueprints in production daily.
 
 This is not a framework. There's nothing to install. It's a set of patterns and principles for anyone running more than a couple of AI agents and wondering why everything keeps breaking.
 
@@ -28,28 +28,26 @@ This is **agent chaos**. HiveHelm is the fix.
 
 ### The Guide (8 Chapters)
 
-Each chapter documents a pattern extracted from a real multi-agent system, framed as lessons learned — not as "install my code."
+All 8 chapters are published. Each documents a pattern extracted from a real multi-agent system, framed as lessons learned, not "install my code."
 
 | Ch | Title | What You'll Learn |
 |----|-------|-------------------|
 | 1 | [The Problem: Agent Chaos](chapters/01-agent-chaos.md) | Why single agents work but multi-agent systems break without structure |
 | 2 | [The Department Model](chapters/02-department-model.md) | How to organize agents into divisions with clear responsibilities |
 | 3 | [Agent Personas That Work](chapters/03-agent-personas.md) | The identity framework: name, role, escalation, delegation, tool scoping |
-| 4 | [Policies as Code](chapters/04-policies-as-code.md) | Routing rules, write scopes, content constraints — all declarative |
+| 4 | [Policies as Code](chapters/04-policies-as-code.md) | Routing rules, write scopes, content constraints, all declarative |
 | 5 | [Composing Teams](chapters/05-composing-teams.md) | Blueprint definitions, parallel + sequential modes, lifecycle management |
 | 6 | [Observability](chapters/06-observability.md) | JSONL event streams, distributed tracing across agent swarms |
 | 7 | [Quality and Health](chapters/07-quality-and-health.md) | Automated skill scoring, system health dashboards |
 | 8 | [The Non-Developer Advantage](chapters/08-non-developer-advantage.md) | Why "builder who ships" beats "10 years of C++ at FAANG" for agent ops |
 
-### deep-review (Showcase Plugin)
+### deep-review (Showcase Plugin) *coming soon*
 
 A standalone Claude Code plugin that runs a 13-agent hierarchical analysis on any codebase. Four division heads (Engineering, Data, DevOps, AI & Automation) each run sub-teams of specialists, cross-discuss findings, and deliver a unified report with prioritized action plan.
 
 Install it, run one command, get a comprehensive codebase audit.
 
-[Learn more →](deep-review/)
-
-### Hooks Collection
+### Hooks Collection *coming soon*
 
 10+ copy-paste hook recipes with explanations for Claude Code:
 
@@ -59,8 +57,6 @@ Install it, run one command, get a comprehensive codebase audit.
 - File change tracking for RAG sync
 - Teammate monitoring patterns
 - Task lifecycle automation
-
-[Browse hooks →](hooks/)
 
 ---
 
@@ -82,7 +78,7 @@ Install it, run one command, get a comprehensive codebase audit.
 ## The HiveHelm Model
 
 ```
-You (Human — the Helmsman)
+You (Human, the Helmsman)
 │
 ├── Executive Division
 │   ├── Chief of Staff (coordinator)
@@ -106,10 +102,10 @@ You (Human — the Helmsman)
 ```
 
 Each division has:
-- **Clear ownership** — which problems belong to which agents
-- **Defined escalation paths** — when to hand off vs. handle
-- **Scoped permissions** — what each agent can read and write
-- **Declared policies** — routing rules, constraints, approval gates
+- **Clear ownership**: which problems belong to which agents
+- **Defined escalation paths**: when to hand off vs. handle
+- **Scoped permissions**: what each agent can read and write
+- **Declared policies**: routing rules, constraints, approval gates
 
 The hive is the structure. You are the helm.
 
@@ -128,7 +124,7 @@ You don't install HiveHelm. You read it, adapt the patterns, and apply them to y
 
 ## Background
 
-HiveHelm is extracted from a real system that has been running in production since late 2025. The author is not a software developer — they're an automation specialist who learned to run multi-agent systems by building one for their own work, making every mistake in the book, and documenting what survived.
+HiveHelm is extracted from a real system that has been running in production since late 2025. The author is not a software developer. They're an automation specialist who learned to run multi-agent systems by building one for their own work, making every mistake in the book, and documenting what survived.
 
 80+ Claude Code sessions. 44,000+ messages. 30 agents. This guide is the distilled result.
 
@@ -146,11 +142,11 @@ This is an opinionated methodology, not a community framework. That said:
 
 ## License
 
-MIT — use it however you want. Attribution appreciated but not required.
+MIT. Use it however you want. Attribution appreciated but not required.
 
 ---
 
 ## Links
 
 - [Author's LinkedIn](https://linkedin.com/in/tolgaoral)
-- [Verluna](https://verluna.com) — GTM Engineering consultancy
+- [Verluna](https://verluna.com) (GTM Engineering consultancy)
