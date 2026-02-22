@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HiveHelm: The Non-Developer's Guide to Agent Operations</title>
+<style>
+  /* ═══════════════════════════════════════════════
+     HIVEHELM E-BOOK STYLESHEET
+     ═══════════════════════════════════════════════ */
+
+  @page {
+    size: A4;
+    margin: 2.5cm 2cm 2.5cm 2cm;
+  }
+
+  @page :first {
+    margin: 0;
+  }
+
+  @page back-cover-page {
+    margin: 0;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    font-size: 16px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body {
+    font-family: 'Charter', 'Georgia', 'Cambria', 'Times New Roman', serif;
+    color: #1a1a1a;
+    background: #ffffff;
+    line-height: 1.75;
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* ─── COVER PAGE ─── */
+
+  .cover {
+    page-break-after: always;
+    background: #0a0a0a;
+    color: #ffffff;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    padding: 3rem 2rem;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(212, 168, 67, 0.06) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(212, 168, 67, 0.04) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .cover-hex-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.04;
+    background-image:
+      linear-gradient(30deg, #d4a843 12%, transparent 12.5%, transparent 87%, #d4a843 87.5%, #d4a843),
+      linear-gradient(150deg, #d4a843 12%, transparent 12.5%, transparent 87%, #d4a843 87.5%, #d4a843),
+      linear-gradient(30deg, #d4a843 12%, transparent 12.5%, transparent 87%, #d4a843 87.5%, #d4a843),
+      linear-gradient(150deg, #d4a843 12%, transparent 12.5%, transparent 87%, #d4a843 87.5%, #d4a843),
+      linear-gradient(60deg, #d4a84377 25%, transparent 25.5%, transparent 75%, #d4a84377 75%, #d4a84377),
+      linear-gradient(60deg, #d4a84377 25%, transparent 25.5%, transparent 75%, #d4a84377 75%, #d4a84377);
+    background-size: 80px 140px;
+    background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+    pointer-events: none;
+  }
+
+  .cover-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .cover-rule-top {
+    width: 60px;
+    height: 2px;
+    background: #d4a843;
+    margin: 0 auto 3rem auto;
+  }
+
+  .cover-title {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 4.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 1.2rem;
+    color: #ffffff;
+  }
+
+  .cover-subtitle {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 3rem;
+    max-width: 480px;
+  }
+
+  .cover-rule-bottom {
+    width: 60px;
+    height: 2px;
+    background: #d4a843;
+    margin: 0 auto 2rem auto;
+  }
+
+  .cover-author {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  /* ─── COPYRIGHT PAGE ─── */
+
+  .copyright-page {
+    page-break-after: always;
+    padding: 60vh 0 2rem 0;
+  }
+
+  .copyright-page p {
+    font-size: 0.85rem;
+    color: #666;
+    line-height: 1.8;
+    margin: 0;
+  }
+
+  .copyright-page a {
+    color: #666;
+    text-decoration: none;
+  }
+
+  /* ─── TABLE OF CONTENTS ─── */
+
+  .toc-page {
+    page-break-after: always;
+    padding: 2rem 0;
+  }
+
+  .toc-page h2 {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 2.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  .toc-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .toc-list li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+    line-height: 1.4;
+  }
+
+  .toc-list li:last-child {
+    border-bottom: none;
+  }
+
+  .toc-chapter-num {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-weight: 700;
+    color: #d4a843;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.15rem;
+  }
+
+  .toc-chapter-title {
+    font-weight: 600;
+    color: #1a1a1a;
+    font-size: 1.05rem;
+  }
+
+  .toc-chapter-summary {
+    color: #666;
+    font-size: 0.82rem;
+    font-style: italic;
+    display: block;
+    margin-top: 0.1rem;
+    line-height: 1.35;
+  }
+
+  .toc-front-matter {
+    font-weight: 600;
+    color: #1a1a1a;
+    font-size: 1.05rem;
+  }
+
+  /* ─── PREFACE ─── */
+
+  .preface {
+    page-break-after: always;
+    padding: 2rem 0;
+  }
+
+  .preface h2 {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 2rem;
+    letter-spacing: -0.01em;
+  }
+
+  /* ─── CHAPTER STYLING ─── */
+
+  .chapter {
+    page-break-before: always;
+    padding: 2rem 0 3rem 0;
+  }
+
+  .chapter-header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid #d4a843;
+  }
+
+  .chapter-number {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #d4a843;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .chapter-title {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #1a1a1a;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+
+  .chapter-epigraph {
+    font-style: italic;
+    color: #555;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  /* ─── CONTENT TYPOGRAPHY ─── */
+
+  .content h2 {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e5e5e5;
+  }
+
+  .content h2:first-child {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 0;
+  }
+
+  .content h3 {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .content h4 {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #333;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .content p {
+    margin-bottom: 1rem;
+    text-align: left;
+  }
+
+  .content p + p {
+    text-indent: 0;
+  }
+
+  .content a {
+    color: #2563eb;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(37, 99, 235, 0.2);
+  }
+
+  .content strong {
+    font-weight: 700;
+    color: #111;
+  }
+
+  .content em {
+    font-style: italic;
+  }
+
+  /* ─── HORIZONTAL RULES ─── */
+
+  .content hr {
+    border: none;
+    height: 1px;
+    background: #d4a843;
+    width: 30%;
+    margin: 2rem auto;
+    opacity: 0.5;
+  }
+
+  /* ─── LISTS ─── */
+
+  .content ul,
+  .content ol {
+    margin-bottom: 1rem;
+    padding-left: 1.8rem;
+  }
+
+  .content li {
+    margin-bottom: 0.4rem;
+    line-height: 1.65;
+  }
+
+  .content li p {
+    margin-bottom: 0.4rem;
+  }
+
+  .content ul li {
+    list-style-type: disc;
+  }
+
+  .content ul li li {
+    list-style-type: circle;
+  }
+
+  /* ─── BLOCKQUOTES ─── */
+
+  .content blockquote {
+    border-left: 3px solid #d4a843;
+    padding: 0.8rem 1.2rem;
+    margin: 1.5rem 0;
+    color: #444;
+    font-style: italic;
+    background: #faf9f7;
+    border-radius: 0 4px 4px 0;
+    page-break-inside: avoid;
+  }
+
+  .content blockquote p {
+    margin-bottom: 0.5rem;
+  }
+
+  .content blockquote p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ─── CODE ─── */
+
+  .content code {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', 'Monaco', monospace;
+    font-size: 0.88em;
+    background: #f3f3f3;
+    padding: 0.15em 0.4em;
+    border-radius: 3px;
+    color: #c7254e;
+  }
+
+  .content pre {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 1.2rem 1.4rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    page-break-inside: avoid;
+  }
+
+  .content pre code {
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    color: #d4d4d4;
+    font-size: inherit;
+  }
+
+  /* ─── TABLES ─── */
+
+  .content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.92rem;
+    page-break-inside: avoid;
+  }
+
+  .content thead th {
+    background: #f5f5f5;
+    font-weight: 700;
+    text-align: left;
+    padding: 0.7rem 0.8rem;
+    border-bottom: 2px solid #d4a843;
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
+  }
+
+  .content tbody td {
+    padding: 0.6rem 0.8rem;
+    border-bottom: 1px solid #eee;
+    vertical-align: top;
+  }
+
+  .content tbody tr:nth-child(even) {
+    background: #fafafa;
+  }
+
+  /* ─── ABOUT THE AUTHOR ─── */
+
+  .about-author {
+    page-break-before: always;
+    padding: 2rem 0;
+  }
+
+  .about-author h2 {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 2rem;
+    letter-spacing: -0.01em;
+  }
+
+  /* ─── BACK COVER ─── */
+
+  .back-cover {
+    page: back-cover-page;
+    break-before: page;
+    background: #0a0a0a;
+    color: #ffffff;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    padding: 3rem 2rem;
+  }
+
+  .back-cover-title {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+  }
+
+  .back-cover-text {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.6);
+    max-width: 420px;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+
+  .back-cover-url {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 0.9rem;
+    color: #d4a843;
+    letter-spacing: 0.02em;
+  }
+
+  /* ─── PRINT OVERRIDES ─── */
+
+  @media print {
+    body {
+      font-size: 11pt;
+    }
+
+    .cover {
+      height: 100vh;
+      margin: -2.5cm -2cm;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .back-cover {
+      padding: 0;
+      height: 100vh;
+    }
+
+    .content pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .content a {
+      color: #1a1a1a;
+      border-bottom: none;
+    }
+
+    .content a[href^="http"]::after {
+      content: " (" attr(href) ")";
+      font-size: 0.8em;
+      color: #666;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     COVER PAGE
+     ═══════════════════════════════════════════════ -->
+
+<div class="cover">
+  <div class="cover-hex-grid"></div>
+  <div class="cover-content">
+    <div class="cover-rule-top"></div>
+    <h1 class="cover-title">HiveHelm</h1>
+    <p class="cover-subtitle">The Non-Developer's Guide to Agent Operations</p>
+    <div class="cover-rule-bottom"></div>
+    <p class="cover-author">Tolga Oral</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     COPYRIGHT PAGE
+     ═══════════════════════════════════════════════ -->
+
+<div class="copyright-page">
+  <div>
+    <p>HiveHelm: The Non-Developer's Guide to Agent Operations</p>
+    <p>Copyright &copy; 2026 Tolga Oral</p>
+    <p>Published under the MIT License</p>
+    <p>&nbsp;</p>
+    <p>First edition, February 2026</p>
+    <p>&nbsp;</p>
+    <p>github.com/HiveHelmOrg/hivehelm</p>
+    <p>&nbsp;</p>
+    <p>This book was written with the help of AI tools, which is the whole point.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     TABLE OF CONTENTS
+     ═══════════════════════════════════════════════ -->
+
+<div class="toc-page">
+  <h2>Contents</h2>
+  <!-- TOC_CONTENT -->
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PREFACE
+     ═══════════════════════════════════════════════ -->
+
+<section class="preface content">
+  <h2>Preface</h2>
+  <!-- PREFACE_CONTENT -->
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPTERS
+     ═══════════════════════════════════════════════ -->
+
+<!-- CHAPTER_1 -->
+
+<!-- CHAPTER_2 -->
+
+<!-- CHAPTER_3 -->
+
+<!-- CHAPTER_4 -->
+
+<!-- CHAPTER_5 -->
+
+<!-- CHAPTER_6 -->
+
+<!-- CHAPTER_7 -->
+
+<!-- CHAPTER_8 -->
+
+<!-- ═══════════════════════════════════════════════
+     ABOUT THE AUTHOR
+     ═══════════════════════════════════════════════ -->
+
+<section class="about-author content">
+  <h2>About the Author</h2>
+  <!-- ABOUT_AUTHOR -->
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     BACK COVER
+     ═══════════════════════════════════════════════ -->
+
+<div class="back-cover">
+  <p class="back-cover-title">HiveHelm</p>
+  <p class="back-cover-text">
+    You don't need to build agents.<br>
+    You need to run them.
+  </p>
+  <p class="back-cover-url">github.com/HiveHelmOrg/hivehelm</p>
+</div>
+
+</body>
+</html>
