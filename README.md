@@ -148,5 +148,5 @@ MIT. Use it however you want. Attribution appreciated but not required.
 
 ## Links
 
-- [Author's LinkedIn](https://linkedin.com/in/tolgaoral)
-- [Verluna](https://verluna.com) (GTM Engineering consultancy)
+- [Author's LinkedIn](https://www.linkedin.com/in/tolga-oral/)
+- [Verluna](https://verluna.de) (GTM Engineering consultancy)
